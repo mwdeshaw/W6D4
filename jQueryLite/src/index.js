@@ -1,0 +1,1 @@
+window.$l = function(arg) {};

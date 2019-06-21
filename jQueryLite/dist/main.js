@@ -86,14 +86,25 @@
 /************************************************************************/
 /******/ ({
 
+/***/ "./src/dom_node_collection.js":
+/*!************************************!*\
+  !*** ./src/dom_node_collection.js ***!
+  \************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("class DOMNodeCollection {\n  constructor(array) {\n    theNodes = Array.from(array)\n    this.nodes = theNodes;\n  }\n\n  empty() {\n    this.html('');\n  }\n\n  html(html){\n    if (typeof html === 'string') {\n      this.each((node) => {\n        node.innerHTML = html;\n    });\n    } else if (this.nodes.length > 0) {\n      return this.nodes[0].innerHTML;\n    }\n  }\n\n  empty() {\n    this.nodes.forEach(node => {\n      node.html = '';\n    });\n  }\n\n  append(children) {\n    if (this.nodes.length === 0) {\n      return null;\n    }\n\n    if (typeof children === 'object' && !(children instanceof DomNodeCollection)) {\n      children = $l(children);\n    }\n\n    if (typeof children === \"string\") {\n      this.forEach((node) => {\n        node.innerHTML += children;\n      });\n    } else if (children instanceof DomNodeCollection) {\n      this.forEach((node) => {\n        children.forEach((childNode) => {\n          node.appendChild(childNode.cloneNode(true));\n        });\n      });\n    }\n  }\n\n  attr(k, v) {\n    if (typeof v === \"string\") {\n      this.forEach(node => {\n        return node.setAttribute(key, val);\n      });\n    } else {\n      return this.nodes[0].getAttribute(k);\n    }\n  }\n\n}\nmodule.exports = DOMNodeCollection;\n\n//# sourceURL=webpack:///./src/dom_node_collection.js?");
+
+/***/ }),
+
 /***/ "./src/index.js":
 /*!**********************!*\
   !*** ./src/index.js ***!
   \**********************/
 /*! no static exports found */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-eval("window.$l = function(arg) {};\n\n//# sourceURL=webpack:///./src/index.js?");
+eval("const DOMNodeCollection = __webpack_require__(/*! ./dom_node_collection */ \"./src/dom_node_collection.js\");\n\nwindow.$l = (arg) => {\n  switch (typeof arg) {\n    case \"string\":\n      return getNodesFromDom(arg);\n    case \"object\":\n      if (arg instanceof HTMLElement) {\n        return new DomNodeCollection([arg]);\n      }\n  }\n};\n\ngetNodesFromDom = (selector) => {\n  let nodeList = this.querySelectorAll(selector);\n  let nodeListArr = Array.from(nodeList);\n  return DomNodeCollection(nodeListArr);\n};\n\n\n//# sourceURL=webpack:///./src/index.js?");
 
 /***/ })
 
